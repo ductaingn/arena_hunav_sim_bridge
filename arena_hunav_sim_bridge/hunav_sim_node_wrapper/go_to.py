@@ -6,9 +6,9 @@ from .base_node import BaseNode
 @attrs.define
 class GoTo(BaseNode):
     agent_id: int
-    time_step: float
+    time_step: float = 0.1
     goal_id: int
-    tolerance: float
+    tolerance: float = 1
 
-    def to_xml(self):
+    def get_actions_conditions(self):
         ...

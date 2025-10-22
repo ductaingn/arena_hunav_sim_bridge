@@ -279,9 +279,9 @@ class BehaviorTree(BaseModel):
 
 class Root(BaseModel):
     main_tree_to_execute: str
-    BTCPP_format: str
-    tree_nodes_model: TreeNodesModel
-    behavior_trees: List[BehaviorTree]
+    BTCPP_format: str = "4"
+    tree_nodes_model: TreeNodesModel = None
+    behavior_trees: List[BehaviorTree] = None
 
     def to_xml(
         self,
