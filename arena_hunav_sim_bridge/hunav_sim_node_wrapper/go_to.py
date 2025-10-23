@@ -1,14 +1,47 @@
+import xml.etree.ElementTree as ET
+
 import attrs
 
-from .base_node import BaseNode
+from arena_hunav_sim_bridge.hunav_sim_node_wrapper import BTNode
+from arena_hunav_sim_bridge.bt_models.tree_nodes_models import InputPort, Action
 
 
 @attrs.define
-class GoTo(BaseNode):
+class GoTo(BTNode):
     agent_id: int
-    time_step: float = 0.1
     goal_id: int
+    time_step: float = 0.1
     tolerance: float = 1
 
     def get_actions_conditions(self):
-        ...
+        input_ports = [
+            InputPort(
+                name="agent_id",
+                type="int",
+            ),
+            InputPort(name="goal_id", type="int"),
+            InputPort(name="time_step", type="float"),
+            InputPort(
+                name="tolerance",
+                type="int",
+            ),
+        ]
+
+        actions = [Action(ID="SetGoal", input_ports=input_ports)]
+
+        conditions = []
+
+        return actions, conditions
+
+    def to_xml(self):
+        element = ET.Element(
+            self.__class__.__name__,
+            attrib={
+                "agent_id": self.agent_id,
+                "goal_id": self.goal_id,
+                "time_step": self.time_step,
+                "tolerance": self.tolerance,
+            },
+        )
+
+        return element

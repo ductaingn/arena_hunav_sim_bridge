@@ -1,8 +1,6 @@
-from typing import Dict, List
-
 import attrs
 
-from ..hunav_sim_node_wrapper.base_node import ArenaNode
+from arena_hunav_sim_bridge.arena_behavior_nodes import ArenaNode
 
 
 @attrs.define
@@ -10,6 +8,7 @@ class GroupIDManager:
     """
     This class provide global IDs to the groups, so that the LLM doesn't have to.
     """
+
     group_id: int = attrs.field(default=0, init=False)
 
     def set_groups_ids(self, node: ArenaNode):
