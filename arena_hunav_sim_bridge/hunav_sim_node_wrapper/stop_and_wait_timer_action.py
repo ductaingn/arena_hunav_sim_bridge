@@ -30,8 +30,8 @@ class StopAndWaitTimerAction(BaseNode):
         element = ET.Element(
             self.__class__.__name__,
             attrib={
-                "agent_id": self.agent_id,
-                "wait_duration": self.wait_duration,
+                "agent_id": str(self.agent_id),
+                "wait_duration": str(self.wait_duration),
             },
         )
 

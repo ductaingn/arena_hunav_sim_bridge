@@ -37,10 +37,10 @@ class GoTo(BTNode):
         element = ET.Element(
             self.__class__.__name__,
             attrib={
-                "agent_id": self.agent_id,
-                "goal_id": self.goal_id,
-                "time_step": self.time_step,
-                "tolerance": self.tolerance,
+                "agent_id": str(self.agent_id),
+                "goal_id": str(self.goal_id),
+                "time_step": str(self.time_step),
+                "tolerance": str(self.tolerance),
             },
         )
 

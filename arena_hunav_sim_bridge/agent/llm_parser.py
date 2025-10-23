@@ -48,6 +48,7 @@ class Parser:
         single_agent_nodes_json: List[Dict] = llm_res.pop("single_agent_nodes")
         multi_agent_nodes_json: List[Dict] = llm_res.pop("multi_agent_nodes")
 
+        # Parse single agent nodes
         for node_json in single_agent_nodes_json:
             node_cls = node_json["name"]
             agent_name: str = node_json["agent_name"]
@@ -65,6 +66,7 @@ class Parser:
             agent.add_actions_conditions(actions, conditions)
             agent.add_node(bt_node, node_order)
 
+        # Parse multi agent nodes
         for node_json in multi_agent_nodes_json:
             node_cls = node_json["name"]
             agents_names: List[str] = node_json["agents_names"]
@@ -90,13 +92,17 @@ class Parser:
                 agent.add_actions_conditions(actions, conditions)
                 agent.add_node(bt_node, nodes_orders[agent.name])
 
+        ret = []
         for agent in self.agents.values():
-            agent.to_xml()
+            ret.append(agent.to_xml())
+
+        return ret
 
 
 if __name__ == "__main__":
+    # Test
     with open(
-        "/home/nguyen/Projects/NUS/arena_hunav_sim_bridge/arena_hunav_sim_bridge/agent/example_llm_response.json",
+        "arena_hunav_sim_bridge/agent/example_llm_response.json",
         "rt",
     ) as file:
         llm_res = file.read()
@@ -104,3 +110,13 @@ if __name__ == "__main__":
     parser = Parser(llm_res)
 
     behavior_trees: List = parser.parse()
+
+    from xml.dom import minidom
+
+    for bt in behavior_trees:
+        pretty_bytes = minidom.parseString(
+            ET.tostring(bt, encoding="UTF-8")
+        ).toprettyxml(indent="  ", encoding="UTF-8")
+
+        pretty_str = pretty_bytes.decode("UTF-8")
+        print(pretty_str)

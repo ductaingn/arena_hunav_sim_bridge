@@ -102,7 +102,7 @@ class TreeNodesModel:
     actions: Optional[List[Action]] = []
 
     def to_xml(self) -> ET.Element:
-        element = ET.Element("TreeNodesModel", attrib={})
+        element = ET.Element("TreeNodesModel")
 
         for action in self.actions:
             element.append(action.to_xml())
