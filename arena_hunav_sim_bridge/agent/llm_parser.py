@@ -16,15 +16,14 @@ from arena_hunav_sim_bridge.ids_manager.group_id_manager import GroupIDManager
 
 @attrs.define
 class Parser:
-    llm_res: str
+    llm_res: Dict
     agents: Dict[int, Agent] = attrs.field(init=False)
     single_agent_nodes: List[ArenaSingleAgentNode] = attrs.field(init=False)
     multi_agent_nodes: List[ArenaMultiAgentNode] = attrs.field(init=False)
 
     @agents.default
     def _agent_factory(self) -> Dict[int, Agent]:
-        llm_res: Dict = json.loads(self.llm_res)
-        agents_json: List[Dict] = llm_res.pop("hunav_agents")
+        agents_json: List[Dict] = self.llm_res.get("hunav_agents")
         agent_id_manager = AgentIDManager()
 
         agents: Dict[str, Agent] = {}
@@ -40,13 +39,12 @@ class Parser:
 
         return agents
 
-    def parse(self) -> List[ET.ElementTree]:
+    def parse(self):
         goal_id_manager = GoalIDManager()
         group_id_manager = GroupIDManager()
 
-        llm_res: Dict = json.loads(self.llm_res)
-        single_agent_nodes_json: List[Dict] = llm_res.pop("single_agent_nodes")
-        multi_agent_nodes_json: List[Dict] = llm_res.pop("multi_agent_nodes")
+        single_agent_nodes_json: List[Dict] = self.llm_res.get("single_agent_nodes")
+        multi_agent_nodes_json: List[Dict] = self.llm_res.get("multi_agent_nodes")
 
         # Parse single agent nodes
         for node_json in single_agent_nodes_json:
@@ -92,12 +90,6 @@ class Parser:
                 agent.add_actions_conditions(actions, conditions)
                 agent.add_node(bt_node, nodes_orders[agent.name])
 
-        ret = []
-        for agent in self.agents.values():
-            ret.append(agent.to_xml())
-
-        return ret
-
 
 if __name__ == "__main__":
     # Test
@@ -105,7 +97,7 @@ if __name__ == "__main__":
         "arena_hunav_sim_bridge/agent/example_llm_response.json",
         "rt",
     ) as file:
-        llm_res = file.read()
+        llm_res = json.load(file)
 
     parser = Parser(llm_res)
 

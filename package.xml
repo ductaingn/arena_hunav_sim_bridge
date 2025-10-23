@@ -2,7 +2,7 @@
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
   <name>arena_hunav_sim_bridge</name>
-  <version>0.0.0</version>
+  <version>0.0.1</version>
   <description>Arena-HuNavSim bridge</description>
   <maintainer email="ductaingn.015203@gmail.com">Duc Tai Nguyen</maintainer>
   <license>MIT</license>

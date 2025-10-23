@@ -45,7 +45,6 @@ class ArenaSingleAgentNode(ArenaNode):
 
 
 class ArenaMultiAgentNode(ArenaNode):
-    agents: Dict[int, Any]
     # Registry shared by all subclasses
     _registry: Dict[str, Type["ArenaMultiAgentNode"]] = {}
 

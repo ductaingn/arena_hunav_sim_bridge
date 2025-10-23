@@ -27,7 +27,7 @@ class Queue(ArenaMultiAgentNode):
     )
     direction: float = attrs.field(
         metadata={
-            "description": "The direction of the queue (yaw angle) in degree, the pose of agents will be calculated base on this attribute and front agent's pose"
+            "description": "The direction of the queue line given in yaw angle, the pose of agents will be calculated base on this attribute and front agent's pose"
         }
     )
     distances: List[float] = attrs.field(
