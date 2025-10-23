@@ -1,7 +1,5 @@
 import attrs
 
-from arena_hunav_sim_bridge.arena_behavior_nodes import ArenaNode
-
 
 @attrs.define
 class GroupIDManager:

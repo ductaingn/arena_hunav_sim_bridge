@@ -51,25 +51,3 @@ class Root:
             element.append(behavior_tree.to_xml())
 
         return element
-
-
-if __name__ == "__main__":
-    from xml.dom import minidom
-    from context import behavior_tree_format
-
-    json_str = (
-        behavior_tree_format.strip()
-        .strip("Output must strictly follow this structure:")
-        .strip("\n    ```json")
-        .strip("\n    ```\n    Do NOT explain anything. Output JSON only.")
-    )
-
-    test = Root.model_validate_json(json_str)
-
-    xml_str = test.to_xml()
-    pretty_bytes = minidom.parseString(
-        ET.tostring(xml_str, encoding="UTF-8")
-    ).toprettyxml(indent="  ", encoding="UTF-8")
-
-    pretty_str = pretty_bytes.decode("UTF-8")
-    print(pretty_str)

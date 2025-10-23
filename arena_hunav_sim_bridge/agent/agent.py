@@ -59,7 +59,6 @@ class Agent:
         """
         nodes = []
         for order in range(len(self.nodes.values())):
-            # TODO: parse this correctly
             nodes.append(self.nodes[order])
 
         node = Sequence(children_nodes=nodes)

@@ -1,8 +1,4 @@
-from typing import Dict, List
-
 import attrs
-
-from ..agent.agent import Agent
 
 
 @attrs.define
