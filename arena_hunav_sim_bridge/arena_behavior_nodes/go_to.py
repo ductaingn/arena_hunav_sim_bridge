@@ -22,7 +22,7 @@ class GoTo(ArenaSingleAgentNode):
 
         set_goal_node = SetGoal(self.agent.id, self.target_x, self.target_y, goal_id)
 
-        go_to_node = HNSGoto(self.agent.id, self.time_step, goal_id, self.tolerance)
+        go_to_node = HNSGoto(self.agent.id, goal_id, self.time_step, self.tolerance)
 
         control_node = Sequence(children_nodes=[set_goal_node, go_to_node])
 
