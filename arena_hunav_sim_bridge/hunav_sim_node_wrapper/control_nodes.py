@@ -8,8 +8,18 @@ from arena_hunav_sim_bridge.hunav_sim_node_wrapper import BTNode
 
 @attrs.define
 class ControlNode(BTNode):
+    children_nodes: List[BTNode]
+
     def get_actions_conditions(self):
-        return [], []
+        all_actions, all_conditions = [], []
+        for node in self.children_nodes:
+            actions, conditions = node.get_actions_conditions()
+            for action in actions:
+                all_actions.append(action)
+            for condition in conditions:
+                all_conditions.append(condition)
+
+        return all_actions, all_conditions
 
     def to_xml(self):
         raise NotImplementedError
@@ -17,8 +27,6 @@ class ControlNode(BTNode):
 
 @attrs.define
 class Sequence(ControlNode):
-    children_nodes: List[BTNode]
-
     def to_xml(self):
         element = ET.Element(self.__class__.__name__)
 
@@ -30,8 +38,6 @@ class Sequence(ControlNode):
 
 @attrs.define
 class Fallback(ControlNode):
-    children_nodes: List[BTNode]
-
     def to_xml(self):
         element = ET.Element(self.__class__.__name__)
 

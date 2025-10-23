@@ -8,10 +8,11 @@ from .tree_nodes_models import TreeNodesModel
 
 @attrs.define
 class BehaviorTree:
-    child_node: BTNode
+    ID: str
+    child_node: BTNode = None
 
     def to_xml(self) -> ET.Element:
-        element = ET.Element("BehaviorTree", attrib={"ID": self.__class__.__name__})
+        element = ET.Element("BehaviorTree", attrib={"ID": self.ID})
 
         element.append(self.child_node.to_xml())
 
@@ -22,8 +23,8 @@ class BehaviorTree:
 class Root:
     main_tree_to_execute: str
     BTCPP_format: str = "4"
-    tree_nodes_model: TreeNodesModel = TreeNodesModel()
-    behavior_trees: Dict[str, BehaviorTree] = {}
+    tree_nodes_model: TreeNodesModel = attrs.field(factory=TreeNodesModel)
+    behavior_trees: Dict[str, BehaviorTree] = attrs.field(factory=dict)
 
     def to_xml(
         self,

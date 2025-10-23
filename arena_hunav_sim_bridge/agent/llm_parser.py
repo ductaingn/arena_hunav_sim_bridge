@@ -34,7 +34,7 @@ class Parser:
                 agent_json["model"],
                 agent_json["waypoints"],
             )
-            agent_id_manager.set_agent_id(agent)
+            agent.id = agent_id_manager.get_agent_id()
             agents.update({agent.name: agent})
 
         return agents
@@ -58,7 +58,10 @@ class Parser:
             node: ArenaSingleAgentNode = ArenaSingleAgentNode.from_json(
                 class_name=node_cls, **node_attributes
             )
-            bt_node = node.to_bt_node(goal_id_manager=goal_id_manager)
+            bt_node = node.to_bt_node(
+                goal_id_manager=goal_id_manager,
+                group_id_manager=group_id_manager,
+            )
             actions, conditions = bt_node.get_actions_conditions()
 
             agent.add_actions_conditions(actions, conditions)
@@ -71,6 +74,7 @@ class Parser:
             nodes_orders: Dict[str, int] = node_json["orders"]
             agents: Dict[str, Agent] = {}
             for a_n in agents_names:
+                agent = self.agents[a_n]
                 agents.update({a_n: agent})
 
             node_attributes: Dict = node_json["attributes"]
@@ -90,6 +94,13 @@ class Parser:
                 agent.add_actions_conditions(actions, conditions)
                 agent.add_node(bt_node, nodes_orders[agent.name])
 
+        ret = []
+
+        for agent in self.agents.values():
+            ret.append(agent.to_xml())
+
+        return ret
+
 
 if __name__ == "__main__":
     # Test
@@ -106,6 +117,8 @@ if __name__ == "__main__":
     from xml.dom import minidom
 
     for bt in behavior_trees:
+        print("Next bt")
+        print("==============")
         pretty_bytes = minidom.parseString(
             ET.tostring(bt, encoding="UTF-8")
         ).toprettyxml(indent="  ", encoding="UTF-8")

@@ -11,9 +11,8 @@ class GroupIDManager:
 
     group_id: int = attrs.field(default=0, init=False)
 
-    def set_groups_ids(self, node: ArenaNode):
-        """
-        Set ID to all the nodes that need `group_id` field recursively
-        """
-        # if node has children then self.set_goals_ids(children)
-        # if node has `group_id` fied then node.group_id = self.group_id ++
+    def get_groups_ids(self):
+        group_id = self.group_id
+        self.group_id += 1
+
+        return group_id

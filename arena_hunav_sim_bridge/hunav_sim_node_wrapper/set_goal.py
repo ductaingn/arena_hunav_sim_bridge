@@ -17,7 +17,7 @@ class SetGoal(BTNode):
         element = ET.Element(
             self.__class__.__name__,
             attrib={
-                "agent_id": str(self.agent_id),
+                "agent_id": "{id}",
                 "goal_id": str(self.goal_id),
                 "target_x": str(self.target_x),
                 "target_y": str(self.target_y),

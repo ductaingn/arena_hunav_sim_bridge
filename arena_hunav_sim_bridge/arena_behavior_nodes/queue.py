@@ -39,9 +39,13 @@ class Queue(ArenaMultiAgentNode):
 
     @waiting_poses.default
     def _set_waiting_pose(self):
-        waiting_poses = []
-        waiting_poses.append(np.array(self.front_agent_pose[:1]))  # x,y
         waiting_poses_dict = {}
+        waiting_poses = []
+        front_agent = list(self.agents.values())[0]
+        waiting_poses_dict.update(
+            {front_agent.name: np.array(self.front_agent_pose[:2])}
+        )
+        waiting_poses.append(np.array(self.front_agent_pose[:2]))  # x,y
 
         direction = np.radians(self.direction)
         unit_vector = np.array([np.cos(direction), np.sin(direction)])

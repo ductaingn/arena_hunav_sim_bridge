@@ -8,8 +8,10 @@ from arena_hunav_sim_bridge.hunav_sim_node_wrapper import BTNode
 
 @attrs.define
 class DecorationNode(BTNode):
+    child_node: BTNode
+
     def get_actions_conditions(self):
-        return [], []
+        return self.child_node.get_actions_conditions()
 
     def to_xml(self):
         raise NotImplementedError
@@ -17,8 +19,6 @@ class DecorationNode(BTNode):
 
 @attrs.define
 class TimeDelayDecorator(DecorationNode):
-    child_node = BTNode
-
     def to_xml(self):
         element = ET.Element("TimeDelay")
 
@@ -29,8 +29,6 @@ class TimeDelayDecorator(DecorationNode):
 
 @attrs.define
 class RetryUntilSuccessful(DecorationNode):
-    child_node = BTNode
-
     def to_xml(self):
         element = ET.Element(self.__class__.__name__)
 
