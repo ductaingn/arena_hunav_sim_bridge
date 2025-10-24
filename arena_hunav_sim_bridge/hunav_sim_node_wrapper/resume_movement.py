@@ -7,20 +7,14 @@ from arena_hunav_sim_bridge.bt_models.tree_nodes_models import InputPort, Action
 
 
 @attrs.define
-class SetGoal(BTNode):
+class ResumeMovement(BTNode):
     agent_id: int
-    target_x: float
-    target_y: float
-    goal_id: int
 
     def to_xml(self):
         element = ET.Element(
             self.__class__.__name__,
             attrib={
                 "agent_id": "{id}",
-                "goal_id": str(self.goal_id),
-                "target_x": str(self.target_x),
-                "target_y": str(self.target_y),
             },
         )
 
@@ -32,15 +26,9 @@ class SetGoal(BTNode):
                 name="agent_id",
                 type="int",
             ),
-            InputPort(name="target_x", type="double"),
-            InputPort(name="target_y", type="double"),
-            InputPort(
-                name="goal_id",
-                type="int",
-            ),
         ]
 
-        actions = [Action(ID="SetGoal", input_ports=input_ports)]
+        actions = [Action(ID="ResumeMovement", input_ports=input_ports)]
 
         conditions = []
 

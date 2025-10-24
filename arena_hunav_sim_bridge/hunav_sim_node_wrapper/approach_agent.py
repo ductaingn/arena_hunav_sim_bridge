@@ -7,11 +7,13 @@ from arena_hunav_sim_bridge.bt_models.tree_nodes_models import InputPort, Action
 
 
 @attrs.define
-class GoTo(BTNode):
+class ApproachAgent(BTNode):
     agent_id: int
-    goal_id: int
+    target_agent_id: int
+    closest_dist: float
+    max_vel: float
+    duration: float
     time_step: float = 0.1
-    tolerance: float = 1
 
     def get_actions_conditions(self):
         input_ports = [
@@ -19,11 +21,16 @@ class GoTo(BTNode):
                 name="agent_id",
                 type="int",
             ),
-            InputPort(name="goal_id", type="int"),
-            InputPort(name="time_step", type="double"),
             InputPort(
-                name="tolerance",
+                name="target_agent_id",
                 type="int",
+            ),
+            InputPort(name="time_step", type="double"),
+            InputPort(name="closest_dist", type="double"),
+            InputPort(name="max_vel", type="double"),
+            InputPort(
+                name="duration",
+                type="double",
             ),
         ]
 
@@ -38,9 +45,11 @@ class GoTo(BTNode):
             self.__class__.__name__,
             attrib={
                 "agent_id": "{id}",
-                "goal_id": str(self.goal_id),
+                "target_agent_id": str(self.target_agent_id),
                 "time_step": str(self.time_step),
-                "tolerance": str(self.tolerance),
+                "closest_dist": str(self.closest_dist),
+                "max_vel": str(self.max_vel),
+                "duration": str(self.duration),
             },
         )
 

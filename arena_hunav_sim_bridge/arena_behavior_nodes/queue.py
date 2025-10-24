@@ -65,7 +65,7 @@ class Queue(ArenaMultiAgentNode):
 
         return wait_duration_dict
 
-    def to_bt_node(self, agent_name: int, *, goal_id_manager: GoalIDManager, **kwargs):
+    def to_bt_node(self, agent_name: str, *, goal_id_manager: GoalIDManager, **kwargs):
         agent: Agent = self.agents[agent_name]
 
         goal_id = goal_id_manager.get_goal_id()

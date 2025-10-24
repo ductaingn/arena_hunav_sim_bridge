@@ -17,7 +17,7 @@ class StopAndWaitTimerAction(BaseNode):
                 name="agent_id",
                 type="int",
             ),
-            InputPort(name="wait_duration", type="float"),
+            InputPort(name="wait_duration", type="double"),
         ]
 
         actions = [Action(ID="StopAndWaitTimerAction", input_ports=input_ports)]
