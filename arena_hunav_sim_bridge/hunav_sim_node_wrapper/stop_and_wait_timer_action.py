@@ -2,12 +2,12 @@ import xml.etree.ElementTree as ET
 
 import attrs
 
-from arena_hunav_sim_bridge.hunav_sim_node_wrapper import BaseNode
+from arena_hunav_sim_bridge.hunav_sim_node_wrapper import BTNode
 from arena_hunav_sim_bridge.bt_models.tree_nodes_models import InputPort, Action
 
 
 @attrs.define
-class StopAndWaitTimerAction(BaseNode):
+class StopAndWaitTimerAction(BTNode):
     agent_id: int
     wait_duration: float
 

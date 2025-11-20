@@ -1,87 +1,104 @@
 {
-    "hunav_agents": [
-        {
-            "name": "hunav_1",
-            "pos": [
-                24.0,
-                20.0,
-                90.0
-            ],
-            "type": "adult",
-            "model": "gazebo_actor",
-            "waypoints": [
-                [
-                    27.1,
-                    7.0,
-                    10.0
-                ],
-                [
-                    21.7,
-                    7.0,
-                    130.0
-                ]
-            ]
-        },
-        {
-            "name": "hunav_2",
-            "pos": [
-                12.0,
-                20.0,
-                -160.0
-            ],
-            "type": "adult",
-            "model": "gazebo_actor",
-            "waypoints": [
-                [
-                    13.1,
-                    8.0,
-                    150.0
-                ],
-                [
-                    17.7,
-                    1.0,
-                    90.0
-                ]
-            ]
-        }
-    ],
-    "single_agent_nodes": [
-        {
-            "name": "GoTo",
-            "agent_name": "hunav_1",
-            "attributes": {
-                "target_x": 0.0,
-                "target_y": 1.1
-            },
-            "order": 0
-        }
-    ],
-    "multi_agent_nodes": [
-        {
-            "name": "Queue",
-            "agents_names": [
-                "hunav_1",
-                "hunav_2"
-            ],
-            "attributes": {
-                "wait_duration": [
-                    20,
-                    30
-                ],
-                "front_agent_pose": [
-                    -90.0,
-                    90.0,
-                    0.0
-                ],
-                "direction": 92.5,
-                "distances": [
-                    1.0
-                ]
-            },
-            "orders": {
-                "hunav_1": 1,
-                "hunav_2": 0
-            }
-        }
-    ]
+  "hunav_agents": [
+    {
+      "name": "hunav_1",
+      "pos": [
+        24.0,
+        20.0,
+        90.0
+      ],
+      "type": "adult",
+      "model": "gazebo_actor",
+      "waypoints": [
+        [
+          27.1,
+          7.0,
+          10.0
+        ],
+        [
+          21.7,
+          7.0,
+          130.0
+        ]
+      ]
+    },
+    {
+      "name": "hunav_2",
+      "pos": [
+        12.0,
+        20.0,
+        -160.0
+      ],
+      "type": "adult",
+      "model": "gazebo_actor",
+      "waypoints": [
+        [
+          13.1,
+          8.0,
+          150.0
+        ],
+        [
+          17.7,
+          1.0,
+          90.0
+        ]
+      ]
+    }
+  ],
+  "single_agent_nodes": [
+    {
+      "name": "GoTo",
+      "attributes": {
+        "agent_name": "hunav_1",
+        "target_x": 0.0,
+        "target_y": 1.1
+      },
+      "order": 0
+    }
+  ],
+  "multi_agent_nodes": [
+    {
+      "name": "Queue",
+      "attributes": {
+        "agents_names": [
+          "hunav_1",
+          "hunav_2"
+        ],
+        "wait_duration": [
+          20,
+          30
+        ],
+        "front_agent_pose": [
+          -90.0,
+          90.0,
+          0.0
+        ],
+        "direction": 92.5,
+        "distances": [
+          1.0
+        ]
+      },
+      "orders": {
+        "hunav_1": 1,
+        "hunav_2": 0
+      }
+    },
+    {
+      "name": "ConversationFormation",
+      "attributes": {
+        "main_agent_name": "hunav_2",
+        "non_main_agent_names": [
+          "hunav_1"
+        ],
+        "conversation_duration": 20.0,
+        "target_x": 10.0,
+        "target_y": 20.0,
+        "time_step": 1.0
+      },
+      "orders": {
+        "hunav_1": 2,
+        "hunav_2": 1
+      }
+    }
+  ]
 }

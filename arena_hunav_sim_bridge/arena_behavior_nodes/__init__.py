@@ -10,7 +10,7 @@ class ArenaNode(BaseNode):
     """Base class for all Arena nodes (both single and multi-agent)."""
 
     @abstractmethod
-    def to_bt_node(self, **kwargs) -> BTNode:
+    def to_bt_node(self, *args, **kwargs) -> BTNode:
         raise NotImplementedError
 
 
@@ -30,7 +30,7 @@ class ArenaSingleAgentNode(ArenaNode):
         return node_cls(**kwargs)
 
     @abstractmethod
-    def to_bt_node(self, agent_name: str, **kwargs) -> BTNode:
+    def to_bt_node(self, **kwargs) -> BTNode:
         raise NotImplementedError
 
     @classmethod
@@ -74,5 +74,18 @@ class ArenaMultiAgentNode(ArenaNode):
         return node_cls
 
 
+from .approach_agent import ApproachAgent
+from .conversation_formation import ConversationFormation
+from .find_nearest_agent import FindNearestAgent
+from .follow_agent import FollowAgent
 from .go_to import GoTo
+from .group_walk import GroupWalk
+from .is_agent_close import IsAgentClose
+from .is_agent_visible import IsAgentVisible
+from .is_at_position import IsAtPosition
 from .queue import Queue
+from .random_chance_condition import RandomChanceCondition
+from .resume_movement import ResumeMovement
+from .say_something import SaySomething
+from .stop_and_wait_timer_action import StopAndWaitTimerAction
+from .stop_movement import StopMovement

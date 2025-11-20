@@ -10,6 +10,7 @@ from arena_hunav_sim_bridge.bt_models.tree_nodes_models import InputPort, Condit
 class IsAgentClose(BTNode):
     agent_id: int
     observer_id: int
+    threshold: float
 
     def to_xml(self):
         element = ET.Element(
@@ -17,6 +18,7 @@ class IsAgentClose(BTNode):
             attrib={
                 "agent_id": "{id}",
                 "observer_id": str(self.observer_id),
+                "threshold": str(self.threshold),
             },
         )
 
@@ -32,6 +34,7 @@ class IsAgentClose(BTNode):
                 name="observer_id",
                 type="int",
             ),
+            InputPort(name="threshold", type="double"),
         ]
 
         actions = []

@@ -15,5 +15,6 @@ class BTNode(BaseNode):
         """
         raise NotImplementedError
 
+    @abstractmethod
     def to_xml(self):
         raise NotImplementedError

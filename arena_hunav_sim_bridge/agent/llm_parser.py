@@ -49,11 +49,43 @@ class Parser:
         # Parse single agent nodes
         for node_json in single_agent_nodes_json:
             node_cls = node_json["name"]
-            agent_name: str = node_json["agent_name"]
-            agent = self.agents[agent_name]
             node_order: int = node_json["order"]
             node_attributes: Dict = node_json["attributes"]
-            node_attributes.update({"agent": agent})
+            agent: Agent
+
+            if (
+                "agent_name" not in node_attributes.keys()
+                and "main_agent_name" not in node_attributes.keys()
+            ):
+                raise ValueError(f"Can not specify the agent for node: {node_json}")
+            if "agent_name" in node_attributes.keys():
+                agent_name: str = node_attributes.pop("agent_name")
+                node_attributes.update({"agent": self.agents[agent_name]})
+                agent = self.agents[agent_name]
+            if "observer_name" in node_attributes.keys():
+                observer_agent_name: str = node_attributes.pop("observer_name")
+                node_attributes.update(
+                    {"observer_agent": self.agents[observer_agent_name]}
+                )
+            if "target_agent_name" in node_attributes.keys():
+                target_agent_name: str = node_attributes.pop("target_agent_name")
+                node_attributes.update({"target_agent": self.agents[target_agent_name]})
+            if "main_agent_name" in node_attributes.keys():
+                main_agent_name: str = node_attributes.pop("main_agent_name")
+                node_attributes.update({"main_agent": self.agents[main_agent_name]})
+                agent = self.agents[main_agent_name]
+            if "non_main_agent_names" in node_attributes.keys():
+                non_main_agent_names: List[str] = node_attributes.pop(
+                    "non_main_agent_names"
+                )
+                node_attributes.update(
+                    {
+                        "non_main_agents": {
+                            non_main_agent_name: self.agents[non_main_agent_name]
+                            for non_main_agent_name in non_main_agent_names
+                        }
+                    }
+                )
 
             node: ArenaSingleAgentNode = ArenaSingleAgentNode.from_json(
                 class_name=node_cls, **node_attributes
@@ -70,15 +102,47 @@ class Parser:
         # Parse multi agent nodes
         for node_json in multi_agent_nodes_json:
             node_cls = node_json["name"]
-            agents_names: List[str] = node_json["agents_names"]
             nodes_orders: Dict[str, int] = node_json["orders"]
             agents: Dict[str, Agent] = {}
-            for a_n in agents_names:
-                agent = self.agents[a_n]
-                agents.update({a_n: agent})
-
             node_attributes: Dict = node_json["attributes"]
-            node_attributes.update({"agents": agents})
+
+            if (
+                "agents_names" not in node_attributes.keys()
+                and "main_agent_name" not in node_attributes.keys()
+                and "non_main_agent_names" not in node_attributes.keys()
+            ):
+                raise ValueError(f"Can not specify the agents for node: {node_json}")
+            if "agents_names" in node_attributes.keys():
+                agents_names: str = node_attributes.pop("agents_names")
+                node_attributes.update(
+                    {
+                        "agents": {
+                            agent_name: self.agents[agent_name]
+                            for agent_name in agents_names
+                        }
+                    }
+                )
+                for agent_name in agents_names:
+                    agents.update({agent_name: self.agents[agent_name]})
+            if "main_agent_name" in node_attributes.keys():
+                main_agent_name: str = node_attributes.pop("main_agent_name")
+                node_attributes.update({"main_agent": self.agents[main_agent_name]})
+                agents.update({main_agent_name: self.agents[main_agent_name]})
+            if "non_main_agent_names" in node_attributes.keys():
+                non_main_agent_names: List[str] = node_attributes.pop(
+                    "non_main_agent_names"
+                )
+                node_attributes.update(
+                    {
+                        "non_main_agents": {
+                            non_main_agent_name: self.agents[non_main_agent_name]
+                            for non_main_agent_name in non_main_agent_names
+                        }
+                    }
+                )
+                for agent_name in non_main_agent_names:
+                    agents.update({agent_name: self.agents[agent_name]})
+
             node: ArenaMultiAgentNode = ArenaMultiAgentNode.from_json(
                 node_cls, **node_attributes
             )

@@ -7,32 +7,30 @@ from arena_hunav_sim_bridge.bt_models.tree_nodes_models import InputPort, Action
 
 
 @attrs.define
-class ConversationFormation(BTNode):
-    main_agent_id: int
-    conversation_duration: float
-    goal_id: int
-    time_step: float
-    non_main_agent_ids: str
+class FollowAgent(BTNode):
+    agent_id: int
+    target_agent_id: int
+    duration: float
+    time_step: float = 0.1
 
     def get_actions_conditions(self):
         input_ports = [
             InputPort(
-                name="main_agent_id",
+                name="agent_id",
                 type="int",
             ),
-            InputPort(name="conversation_duration", type="double"),
             InputPort(
-                name="goal",
+                name="target_agent_id",
                 type="int",
             ),
             InputPort(name="time_step", type="double"),
             InputPort(
-                name="non_main_agent_id",
-                type="string",
+                name="duration",
+                type="double",
             ),
         ]
 
-        actions = [Action(ID="ConversationFormation", input_ports=input_ports)]
+        actions = [Action(ID="SetGoal", input_ports=input_ports)]
 
         conditions = []
 
@@ -42,11 +40,10 @@ class ConversationFormation(BTNode):
         element = ET.Element(
             self.__class__.__name__,
             attrib={
-                "main_agent_id": str(self.main_agent_id),
-                "conversation_duration": str(self.conversation_duration),
-                "goal_id": str(self.goal_id),
+                "agent_id": "{id}",
+                "target_agent_id": str(self.target_agent_id),
                 "time_step": str(self.time_step),
-                "non_main_agent_id": self.non_main_agent_ids,
+                "duration": str(self.duration),
             },
         )
 

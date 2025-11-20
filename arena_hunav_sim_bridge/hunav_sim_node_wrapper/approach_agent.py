@@ -10,10 +10,8 @@ from arena_hunav_sim_bridge.bt_models.tree_nodes_models import InputPort, Action
 class ApproachAgent(BTNode):
     agent_id: int
     target_agent_id: int
-    closest_dist: float
-    max_vel: float
     duration: float
-    time_step: float = 0.1
+    time_step: float
 
     def get_actions_conditions(self):
         input_ports = [
@@ -25,8 +23,6 @@ class ApproachAgent(BTNode):
                 name="target_agent_id",
                 type="int",
             ),
-            InputPort(name="time_step", type="double"),
-            InputPort(name="closest_dist", type="double"),
             InputPort(name="max_vel", type="double"),
             InputPort(
                 name="duration",
@@ -47,8 +43,6 @@ class ApproachAgent(BTNode):
                 "agent_id": "{id}",
                 "target_agent_id": str(self.target_agent_id),
                 "time_step": str(self.time_step),
-                "closest_dist": str(self.closest_dist),
-                "max_vel": str(self.max_vel),
                 "duration": str(self.duration),
             },
         )

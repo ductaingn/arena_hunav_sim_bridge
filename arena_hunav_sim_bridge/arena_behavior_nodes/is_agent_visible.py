@@ -11,12 +11,12 @@ from arena_hunav_sim_bridge.hunav_sim_node_wrapper.is_agent_visible import (
 @attrs.define
 class IsAgentVisible(ArenaSingleAgentNode):
     agent: Agent
-    ovserver_agent: Agent
+    observer_agent: Agent
     distance: float
 
     def to_bt_node(self, **kwargs):
         iav_node = HNSIsAgentVisible(
-            self.agent.id, self.ovserver_agent.id, self.distance
+            self.agent.id, self.observer_agent.id, self.distance
         )
 
         return iav_node

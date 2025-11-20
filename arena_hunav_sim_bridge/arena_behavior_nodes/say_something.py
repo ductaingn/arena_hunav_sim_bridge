@@ -11,9 +11,8 @@ from arena_hunav_sim_bridge.hunav_sim_node_wrapper.say_something import (
 @attrs.define
 class SaySomething(ArenaSingleAgentNode):
     agent: Agent
-    message: str
 
     def to_bt_node(self, **kwargs):
-        ss_node = HNSSaySomething(self.agent.id, self.message)
+        ss_node = HNSSaySomething(self.agent.id, f"I am {self.agent.name}")
 
         return ss_node
