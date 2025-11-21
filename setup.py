@@ -17,7 +17,6 @@ setup(
     maintainer_email='ductaingn.015203@gmail.com',
     description='Arena-HuNavSim bridge',
     license='MIT',
-    tests_require=['pytest'],
     # entry_points={
     #     'console_scripts': [
     #         'hello_world_node = arena_hunav_sim_bridge.hello_world_node:main'

@@ -54,7 +54,7 @@ class ConversationFormation(ArenaMultiAgentNode):
 
         else:
             cf_node = HNSConversationFormation(
-                self.non_main_agents[agent_name].id,
+                self.main_agent.id,
                 self.conversation_duration,
                 self.goal_id,
                 self.time_step,

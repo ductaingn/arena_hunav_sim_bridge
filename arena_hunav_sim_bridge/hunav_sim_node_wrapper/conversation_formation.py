@@ -27,7 +27,7 @@ class ConversationFormation(BTNode):
             ),
             InputPort(name="time_step", type="double"),
             InputPort(
-                name="non_main_agent_id",
+                name="non_main_agent_ids",
                 type="string",
             ),
         ]
@@ -46,7 +46,7 @@ class ConversationFormation(BTNode):
                 "conversation_duration": str(self.conversation_duration),
                 "goal_id": str(self.goal_id),
                 "time_step": str(self.time_step),
-                "non_main_agent_id": self.non_main_agent_ids,
+                "non_main_agent_ids": self.non_main_agent_ids,
             },
         )
 

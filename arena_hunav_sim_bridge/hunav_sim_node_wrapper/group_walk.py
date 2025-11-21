@@ -26,7 +26,7 @@ class GroupWalk(BTNode):
             ),
             InputPort(name="time_step", type="double"),
             InputPort(
-                name="non_main_agent_id",
+                name="non_main_agent_ids",
                 type="string",
             ),
         ]
@@ -43,7 +43,7 @@ class GroupWalk(BTNode):
             attrib={
                 "main_agent_id": str(self.main_agent_id),
                 "time_step": str(self.time_step),
-                "non_main_agent_id": self.non_main_agent_ids,
+                "non_main_agent_ids": self.non_main_agent_ids,
                 "duration": str(self.duration),
             },
         )
