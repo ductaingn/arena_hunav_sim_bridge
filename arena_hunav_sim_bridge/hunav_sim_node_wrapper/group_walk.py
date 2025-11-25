@@ -31,7 +31,7 @@ class GroupWalk(BTNode):
             ),
         ]
 
-        actions = [Action(ID="GroupWalk", input_ports=input_ports)]
+        actions = [Action(ID="SetGroupWalk", input_ports=input_ports)]
 
         conditions = []
 
@@ -39,7 +39,7 @@ class GroupWalk(BTNode):
 
     def to_xml(self):
         element = ET.Element(
-            self.__class__.__name__,
+            "SetGroupWalk",
             attrib={
                 "main_agent_id": str(self.main_agent_id),
                 "time_step": str(self.time_step),
