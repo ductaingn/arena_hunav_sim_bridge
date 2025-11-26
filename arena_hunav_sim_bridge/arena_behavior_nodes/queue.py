@@ -33,7 +33,7 @@ class Queue(ArenaMultiAgentNode):
     distance: List[float] = attrs.field(
         metadata={"description": "The distance between each agents"}
     )
-    waiting_poses: Dict[int, np.ndarray[float, float, float]] = attrs.field(
+    waiting_poses: Dict[int, np.ndarray[float]] = attrs.field(
         init=False, metadata={"description": "The calculated poses of agents."}
     )
 
@@ -51,8 +51,8 @@ class Queue(ArenaMultiAgentNode):
         unit_vector = np.array([np.cos(direction), np.sin(direction)])
 
         for agent in list(self.agents.values())[1:]:
-            distance = np.random.normal(self.distance, 0.1) # Make distance between agents a litle bit different from each other to look more realistic
-            waiting_pose = waiting_poses[-1] + unit_vector * distance
+            _distance = np.random.normal(self.distance, 0.1) # Make distance between agents a litle bit different from each other to look more realistic
+            waiting_pose = waiting_poses[-1] + unit_vector * _distance
             waiting_poses_dict[agent.name] = waiting_pose
             waiting_poses.append(waiting_pose)
 
