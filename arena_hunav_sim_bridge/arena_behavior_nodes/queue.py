@@ -30,10 +30,10 @@ class Queue(ArenaMultiAgentNode):
             "description": "The direction of the queue line given in yaw angle, the pose of agents will be calculated base on this attribute and front agent's pose"
         }
     )
-    distances: List[float] = attrs.field(
+    distance: List[float] = attrs.field(
         metadata={"description": "The distance between each agents"}
     )
-    waiting_poses: Dict[int, np.ndarray] = attrs.field(
+    waiting_poses: Dict[int, np.ndarray[float, float, float]] = attrs.field(
         init=False, metadata={"description": "The calculated poses of agents."}
     )
 
@@ -50,8 +50,9 @@ class Queue(ArenaMultiAgentNode):
         direction = np.radians(self.direction)
         unit_vector = np.array([np.cos(direction), np.sin(direction)])
 
-        for index, agent in enumerate(list(self.agents.values())[1:]):
-            waiting_pose = waiting_poses[-1] + unit_vector * self.distances[index]
+        for agent in list(self.agents.values())[1:]:
+            distance = np.random.normal(self.distance, 0.1) # Make distance between agents a litle bit different from each other to look more realistic
+            waiting_pose = waiting_poses[-1] + unit_vector * distance
             waiting_poses_dict[agent.name] = waiting_pose
             waiting_poses.append(waiting_pose)
 
