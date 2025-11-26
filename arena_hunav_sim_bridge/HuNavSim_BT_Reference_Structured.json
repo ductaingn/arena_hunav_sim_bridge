@@ -366,7 +366,7 @@
         "n_agent": "single agent node"
       },
       {
-        "name": "Queue",
+        "name": "FormQueue",
         "purpose": "Commands agents to queue in line, the order of agents is determined by the order of their names in the list.",
         "inputs": [
           {
@@ -396,7 +396,45 @@
           {
             "name": "distance",
             "type": "double",
-            "description": "The distance between each agents.",
+            "description": "Nominal spacing between consecutive agents in the queue.",
+            "required": false
+          }
+        ],
+        "outputs": [],
+        "n_agent": "multi agent node"
+      },
+      {
+        "name": "AdvanceQueue",
+        "purpose": "Commands multiple agents to form a queue and then advance progressively toward the front. Each agent first moves to its designated waiting position, then successively moves to the previous agent's position as the queue advances. The order of the queue is determined by the order in which agents are listed.",
+        "inputs": [
+          {
+            "name": "agents_names",
+            "type": "list[string]",
+            "description": "List of participating agent names in queue order. For example: [\"hunav_1\", \"hunav_2\", \"hunav_3\"]. This order determines the queue progression.",
+            "required": true
+          },
+          {
+            "name": "wait_duration",
+            "type": "double",
+            "description": "Base waiting time [s] applied each time an agent reaches a queue position. This pause allows the queue to progress gradually.",
+            "required": true
+          },
+          {
+            "name": "front_agent_pose",
+            "type": "list[double]",
+            "description": "The pose ([x, y, yaw]) of the first agent at the front of the queue. Positions for the remaining agents are computed automatically based on this pose, direction, and distance.",
+            "required": true
+          },
+          {
+            "name": "direction",
+            "type": "double",
+            "description": "Yaw angle defining the direction in which the queue extends. All waiting positions are generated along this direction.",
+            "required": false
+          },
+          {
+            "name": "distance",
+            "type": "double",
+            "description": "Nominal spacing between consecutive agents in the queue.",
             "required": false
           }
         ],

@@ -16,9 +16,9 @@ from arena_hunav_sim_bridge.hunav_sim_node_wrapper.control_nodes import Sequence
 
 @ArenaMultiAgentNode.register_node
 @attrs.define
-class Queue(ArenaMultiAgentNode):
+class FormQueue(ArenaMultiAgentNode):
     agents: Dict[str, Agent]
-    wait_duration: List[float]
+    wait_duration: float
     _wait_duration: Dict[str, float] = attrs.field(init=False)
     front_agent_pose: List[float] = attrs.field(
         metadata={
@@ -30,10 +30,10 @@ class Queue(ArenaMultiAgentNode):
             "description": "The direction of the queue line given in yaw angle, the pose of agents will be calculated base on this attribute and front agent's pose"
         }
     )
-    distance: List[float] = attrs.field(
-        metadata={"description": "The distance between each agents"}
+    distance: float = attrs.field(
+        metadata={"description": "The distance between agents"}
     )
-    waiting_poses: Dict[int, np.ndarray[float]] = attrs.field(
+    waiting_poses: Dict[str, np.ndarray[float]] = attrs.field(
         init=False, metadata={"description": "The calculated poses of agents."}
     )
 
@@ -62,7 +62,7 @@ class Queue(ArenaMultiAgentNode):
     def _wait_duration_factory(self):
         wait_duration_dict = {}
         for index, agent in enumerate(list(self.agents.values())):
-            wait_duration_dict[agent.name] = self.wait_duration[index]
+            wait_duration_dict[agent.name] = self.wait_duration
 
         return wait_duration_dict
 

@@ -74,16 +74,17 @@ class ArenaMultiAgentNode(ArenaNode):
         return node_cls
 
 
+from .advance_queue import AdvanceQueue
 from .approach_agent import ApproachAgent
 from .conversation_formation import ConversationFormation
 from .find_nearest_agent import FindNearestAgent
 from .follow_agent import FollowAgent
+from .form_queue import FormQueue
 from .go_to import GoTo
 from .group_walk import GroupWalk
 from .is_agent_close import IsAgentClose
 from .is_agent_visible import IsAgentVisible
 from .is_at_position import IsAtPosition
-from .queue import Queue
 from .random_chance_condition import RandomChanceCondition
 from .resume_movement import ResumeMovement
 from .say_something import SaySomething
