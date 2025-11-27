@@ -51,7 +51,7 @@ class FormQueue(ArenaMultiAgentNode):
         unit_vector = np.array([np.cos(direction), np.sin(direction)])
 
         for agent in list(self.agents.values())[1:]:
-            _distance = np.random.normal(self.distance, 0.1) # Make distance between agents a litle bit different from each other to look more realistic
+            _distance = np.random.normal(min(self.distance, 3.0), 0.1) # Make distance between agents a litle bit different from each other to look more realistic
             waiting_pose = waiting_poses[-1] + unit_vector * _distance
             waiting_poses_dict[agent.name] = waiting_pose
             waiting_poses.append(waiting_pose)
