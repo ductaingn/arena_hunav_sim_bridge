@@ -334,6 +334,39 @@
         "n_agent": "single agent node"
       },
       {
+        "name": "LookAtPoint",
+        "purpose": "Makes the agent orient towards a specific point in space.",
+        "inputs": [
+          {
+            "name": "agent_name",
+            "type": "int",
+            "description": "Name of the agent.",
+            "required": true
+          },
+          {
+            "name": "target_x",
+            "type": "double",
+            "description": "X-Coordinate of the target point.",
+            "required": true
+          },
+          {
+            "name": "target_y",
+            "type": "double",
+            "description": "Y-Coordinate of the target point.",
+            "required": true
+          },
+          {
+            "name": "yaw_tolerance",
+            "type": "double",
+            "description": "Angle tolerance [rad] to consider “aligned”",
+            "default": 1.0,
+            "required": false
+          }
+        ],
+        "outputs": [],
+        "n_agent": "single agent node"
+      },
+      {
         "name": "FollowAgent",
         "purpose": "Commands an agent to follow another target agent.",
         "inputs": [
