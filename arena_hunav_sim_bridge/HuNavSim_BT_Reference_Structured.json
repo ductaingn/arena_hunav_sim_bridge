@@ -167,7 +167,7 @@
       },
       {
         "name": "StopAndWaitTimerAction",
-        "purpose": "Implements a stop‑and‑wait behaviour that stops the agent for a defined duration.",
+        "purpose": "Implements a stop-and-wait behaviour that stops the agent for a defined duration.",
         "inputs": [
           {
             "name": "agent_name",
