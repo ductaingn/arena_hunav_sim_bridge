@@ -17,12 +17,12 @@ from arena_hunav_sim_bridge.ids_manager.group_id_manager import GroupIDManager
 @attrs.define
 class Parser:
     llm_res: Dict
-    agents: Dict[int, Agent] = attrs.field(init=False)
+    agents: Dict[str, Agent] = attrs.field(init=False)
     single_agent_nodes: List[ArenaSingleAgentNode] = attrs.field(init=False)
     multi_agent_nodes: List[ArenaMultiAgentNode] = attrs.field(init=False)
 
     @agents.default
-    def _agent_factory(self) -> Dict[int, Agent]:
+    def _agent_factory(self) -> Dict[str, Agent]:
         agents_json: List[Dict] = self.llm_res.get("hunav_agents")
         agent_id_manager = AgentIDManager()
 

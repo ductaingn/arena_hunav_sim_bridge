@@ -1,4 +1,4 @@
-from typing import Dict, List
+from typing import Dict, List, Tuple
 import numpy as np
 
 import attrs
@@ -9,6 +9,7 @@ from arena_hunav_sim_bridge.hunav_sim_node_wrapper import BTNode
 from arena_hunav_sim_bridge.ids_manager.goal_id_manager import GoalIDManager
 from arena_hunav_sim_bridge.hunav_sim_node_wrapper.set_goal import SetGoal
 from arena_hunav_sim_bridge.hunav_sim_node_wrapper.go_to import GoTo
+from arena_hunav_sim_bridge.hunav_sim_node_wrapper.look_at_point import LookAtPoint
 from arena_hunav_sim_bridge.hunav_sim_node_wrapper.stop_and_wait_timer_action import (
     StopAndWaitTimerAction,
 )
@@ -41,6 +42,9 @@ class AdvanceQueue(ArenaMultiAgentNode):
     goals_ids: Dict[str, int | None] = attrs.field(
         init=False, metadata={"description": "This dict contains the ID of each agent's initial position in the queue line. This must be assigned for every agent at once."}
     )
+    point_to_look_at: Tuple[float, float] = attrs.field(
+        init=False, metadata={"description": "Because HuNavSim social force model does not include yaw angle, so we need to create a point in front of the line to make agents look at it to adjust the yaw of agents for realisticity."}
+    )
 
     def __attrs_post_init__(self):
         self.agent_ordered = list(self.agents.values())
@@ -56,6 +60,8 @@ class AdvanceQueue(ArenaMultiAgentNode):
 
         direction = np.radians(self.direction)
         unit_vector = np.array([np.cos(direction), np.sin(direction)])
+
+        self.point_to_look_at = waiting_poses[0] - unit_vector*4 # 4[m] from the first position in the line
 
         for agent in self.agent_ordered[1:]:
             _distance = np.random.normal(min(self.distance, 3.0), 0.1) # Make distance between agents a litle bit different from each other to look more realistic
@@ -78,6 +84,8 @@ class AdvanceQueue(ArenaMultiAgentNode):
         self.goals_ids = goals_ids
     
     def _assign_goals_ids(self, goal_id_manager: GoalIDManager):
+        self.goals_ids["point_to_look_at"] = goal_id_manager.get_goal_id()
+
         for agent in self.agent_ordered:
             goal_id = goal_id_manager.get_goal_id()
             self.goals_ids[agent.name] = goal_id
@@ -99,10 +107,12 @@ class AdvanceQueue(ArenaMultiAgentNode):
 
         go_to_node = GoTo(agent_id=agent.id, goal_id=self.goals_ids[agent.name])
 
+        lop_node = LookAtPoint(agent_id=agent.id, goal_id=self.goals_ids["point_to_look_at"])
+
         sawta_node = StopAndWaitTimerAction(
             agent_id=agent.id, wait_duration=self._wait_duration[agent_name]
         )
-        nodes: List[BTNode] = [set_goal_node, go_to_node, sawta_node]
+        nodes: List[BTNode] = [set_goal_node, go_to_node, lop_node, sawta_node]
 
         # Each agent waits until the agent in front of it move, then moves to that position, until it reaches the front of the queue line
         for index in reversed(range(agent_index)):
@@ -110,6 +120,9 @@ class AdvanceQueue(ArenaMultiAgentNode):
             agent_ahead = self.agent_ordered[index]
             nodes.append(
                 GoTo(agent_id=agent.id, goal_id=self.goals_ids[agent_ahead.name])
+            )
+            nodes.append(
+                LookAtPoint(agent_id=agent.id, goal_id=self.goals_ids["point_to_look_at"])
             )
             nodes.append(
                 StopAndWaitTimerAction(

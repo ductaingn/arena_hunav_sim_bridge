@@ -27,7 +27,7 @@ class GoTo(BTNode):
             ),
         ]
 
-        actions = [Action(ID="SetGoal", input_ports=input_ports)]
+        actions = [Action(ID=self.__class__.__name__, input_ports=input_ports)]
 
         conditions = []
 

@@ -85,6 +85,7 @@ from .group_walk import GroupWalk
 from .is_agent_close import IsAgentClose
 from .is_agent_visible import IsAgentVisible
 from .is_at_position import IsAtPosition
+from .look_at_point import LookAtPoint
 from .random_chance_condition import RandomChanceCondition
 from .resume_movement import ResumeMovement
 from .say_something import SaySomething
