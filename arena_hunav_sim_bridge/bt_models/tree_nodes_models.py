@@ -56,7 +56,7 @@ class OutputPort:
 class Condition:
     ID: str
     input_ports: Optional[List[InputPort]] = []
-    output_port: Optional[List[OutputPort]] = []
+    output_ports: Optional[List[OutputPort]] = []
 
     def to_xml(self) -> ET.Element:
         element = ET.Element("Condition", attrib={"ID": self.ID})
@@ -65,7 +65,7 @@ class Condition:
             ip: InputPort
             element.append(ip.to_xml())
 
-        for op in self.output_port or []:
+        for op in self.output_ports or []:
             op: OutputPort
             element.append(op.to_xml())
 
@@ -76,7 +76,7 @@ class Condition:
 class Action:
     ID: str
     input_ports: Optional[List[InputPort]] = []
-    output_port: Optional[List[OutputPort]] = []
+    output_ports: Optional[List[OutputPort]] = []
 
     def __attrs_post_init__(self):
         if self.ID in ACTION_NODE_ID_MAP:

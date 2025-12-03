@@ -35,7 +35,7 @@ class FindNearestAgent(BTNode):
 
         actions = [
             Action(
-                ID="FindNearestAgent", input_ports=input_ports, output_port=output_ports
+                ID="FindNearestAgent", input_ports=input_ports, output_ports=output_ports
             )
         ]
 

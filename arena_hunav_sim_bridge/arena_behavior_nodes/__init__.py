@@ -76,6 +76,7 @@ class ArenaMultiAgentNode(ArenaNode):
 
 from .advance_queue import AdvanceQueue
 from .approach_agent import ApproachAgent
+from .block_agent import BlockAgent
 from .conversation_formation import ConversationFormation
 from .find_nearest_agent import FindNearestAgent
 from .follow_agent import FollowAgent
@@ -84,7 +85,12 @@ from .go_to import GoTo
 from .group_walk import GroupWalk
 from .is_agent_close import IsAgentClose
 from .is_agent_visible import IsAgentVisible
+from .is_anyone_looking_at_me import IsAnyoneLookingAtMe
+from .is_anyone_speaking import IsAnyoneSpeaking
 from .is_at_position import IsAtPosition
+from .is_looking_at_me import IsLookingAtMe
+from .is_speaking import IsSpeaking
+from .look_at_agent import LookAtAgent
 from .look_at_point import LookAtPoint
 from .random_chance_condition import RandomChanceCondition
 from .resume_movement import ResumeMovement

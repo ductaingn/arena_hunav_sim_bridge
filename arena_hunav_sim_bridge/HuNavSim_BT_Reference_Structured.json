@@ -100,6 +100,172 @@
         ],
         "outputs": [],
         "n_agent": "single agent node"
+      },
+      {
+        "name": "IsAnyoneLookingAtMe",
+        "purpose": "Determines if any agent is looking at the agent and returns the observer's identifier if the condition is met.",
+        "inputs": [
+          {
+            "name": "agent_name",
+            "type": "int",
+            "description": "Identifier of the agent being observed.",
+            "required": true
+          },
+          {
+            "name": "time_step",
+            "type": "double",
+            "description": "Time step for movement updates [s].",
+            "required": true
+          },
+          {
+            "name": "distance_threshold",
+            "type": "int",
+            "description": "Maximum distance for detecting potential observers [m].",
+            "required": true
+          },
+          {
+            "name": "angle_threshold",
+            "type": "int",
+            "description": "Angular threshold specifying how precisely the observer must be aligned [rad].",
+            "required": true
+          },
+          {
+            "name": "duration",
+            "type": "double",
+            "description": "Duration that the condition must persist [s].",
+            "required": false
+          }
+        ],
+        "outputs": [
+          {
+            "name": "observer_id",
+            "type": "double",
+            "description": "Identifier of the agent that is looking at the target agent.",
+            "required": false
+          }
+        ],
+        "n_agent": "single agent node"
+      },
+      {
+        "name": "IsAnyoneSpeaking",
+        "purpose": "For a specified duration, evaluates whether any agent within a given distance is speaking (publishing a ROS-2 string message).",
+        "inputs": [
+          {
+            "name": "agent_name",
+            "type": "int",
+            "description": "Identifier of the agent checking for speakers.",
+            "required": true
+          },
+          {
+            "name": "time_step",
+            "type": "double",
+            "description": "Time step for movement updates [s].",
+            "required": true
+          },
+          {
+            "name": "distance_threshold",
+            "type": "int",
+            "description": "Maximum distance within which speaking is detected [m].",
+            "required": true
+          },
+          {
+            "name": "duration",
+            "type": "double",
+            "description": "Duration over which the speaking condition is evaluated.",
+            "required": false
+          }
+        ],
+        "outputs": [
+          {
+            "name": "speaker_id",
+            "type": "double",
+            "description": "Identifier of the detected speaking agent.",
+            "required": false
+          }
+        ],
+        "n_agent": "single agent node"
+      },
+      {
+        "name": "IsLookingAtMe",
+        "purpose": "Checks whether a specified target agent is looking at the agent over a defined time, distance, and angle.",
+        "inputs": [
+          {
+            "name": "agent_name",
+            "type": "int",
+            "description": "Identifier of the agent being looked at.",
+            "required": true
+          },
+          {
+            "name": "time_step",
+            "type": "double",
+            "description": "Time step for movement updates [s].",
+            "required": true
+          },
+          {
+            "name": "target_agent_name",
+            "type": "double",
+            "description": "Identifier of the target agent that is potentially looking.",
+            "required": true
+          },
+          {
+            "name": "distance_threshold",
+            "type": "int",
+            "description": "Maximum range to detect the look direction [m].",
+            "required": true
+          },
+          {
+            "name": "angle_threshold",
+            "type": "int",
+            "description": "Angular threshold for the looking condition [rad].",
+            "required": true
+          },
+          {
+            "name": "duration",
+            "type": "double",
+            "description": "Duration over which the condition is checked [s].",
+            "required": false
+          }
+        ],
+        "outputs": [],
+        "n_agent": "single agent node"
+      },
+      {
+        "name": "IsSpeaking",
+        "purpose": "Checks whether the specified agent is actively speaking within a set distance threshold over a specified duration.",
+        "inputs": [
+          {
+            "name": "agent_name",
+            "type": "int",
+            "description": "Identifier of the agent checking for the speaker.",
+            "required": true
+          },
+          {
+            "name": "time_step",
+            "type": "double",
+            "description": "Time step for movement updates [s].",
+            "required": true
+          },
+          {
+            "name": "target_agent_name",
+            "type": "double",
+            "description": "Identifier of the agent whose speaking status is evaluated.",
+            "required": true
+          },
+          {
+            "name": "distance_threshold",
+            "type": "int",
+            "description": "Distance range for detecting the speaking condition [m].",
+            "required": true
+          },
+          {
+            "name": "duration",
+            "type": "double",
+            "description": "Duration over which the condition is considered [s].",
+            "required": false
+          }
+        ],
+        "outputs": [],
+        "n_agent": "single agent node"
       }
     ],
     "Action node": [
@@ -302,6 +468,44 @@
         "n_agent": "single agent node"
       },
       {
+        "name": "BlockAgent",
+        "purpose": "Commands the agent to block another agent's path for a defined duration.",
+        "inputs": [
+          {
+            "name": "agent_name",
+            "type": "int",
+            "description": "Identifier of the blocking agent.",
+            "required": true
+          },
+          {
+            "name": "target_agent_name",
+            "type": "int",
+            "description": "Identifier of the agent to be blocked.",
+            "required": true
+          },
+          {
+            "name": "time_step",
+            "type": "double",
+            "description": "Time step for movement updates [s].",
+            "required": true
+          },
+          {
+            "name": "front_dist",
+            "type": "double",
+            "description": "Blocking distance threshold [m].",
+            "required": true
+          },
+          {
+            "name": "duration",
+            "type": "double",
+            "description": "Duration of the blocking action [s].",
+            "required": true
+          }
+        ],
+        "outputs": [],
+        "n_agent": "single agent node"
+      },
+      {
         "name": "GroupWalk",
         "purpose": "Directs a group to walk together with a designated main agent.",
         "inputs": [
@@ -328,6 +532,32 @@
             "type": "double",
             "description": "Duration for which the behaviour runs [s]. If omitted, the behaviour runs indefinitely.",
             "required": false
+          }
+        ],
+        "outputs": [],
+        "n_agent": "single agent node"
+      },
+      {
+        "name": "LookAtAgent",
+        "purpose": "Directs an agent (acting as the observer) to focus on another agent.",
+        "inputs": [
+          {
+            "name": "observer_name",
+            "type": "int",
+            "description": "Identifier of the observing agent.",
+            "required": true
+          },
+          {
+            "name": "target_agent_name",
+            "type": "int",
+            "description": "Identifier of the target agent.",
+            "required": true
+          },
+          {
+            "name": "yaw_tolerance",
+            "type": "double",
+            "description": "Angle tolerance to consider “aligned” [rad].",
+            "required": true
           }
         ],
         "outputs": [],

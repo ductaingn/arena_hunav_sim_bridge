@@ -3,33 +3,29 @@ import xml.etree.ElementTree as ET
 import attrs
 
 from arena_hunav_sim_bridge.hunav_sim_node_wrapper import BTNode
-from arena_hunav_sim_bridge.bt_models.tree_nodes_models import InputPort, Action
+from arena_hunav_sim_bridge.bt_models.tree_nodes_models import InputPort, Condition
 
 
 @attrs.define
-class ApproachAgent(BTNode):
+class IsSpeaking(BTNode):
     agent_id: int
-    target_agent_id: int
-    duration: float
     time_step: float
+    target_id: int
+    distance_threshold: float
+    duration: float
 
     def get_actions_conditions(self):
         input_ports = [
-            InputPort(
-                name="agent_id",
-                type="int",
-            ),
-            InputPort(
-                name="target_agent_id",
-                type="int",
-            ),
-            InputPort(name="duration", type="double"),
+            InputPort(name="agent_id", type="int"),
             InputPort(name="time_step", type="double"),
+            InputPort(name="target_id",type="int"),
+            InputPort(name="distance_threshold",type="double"),
+            InputPort(name="duration", type="double"),
         ]
 
-        actions = [Action(ID=self.__class__.__name__, input_ports=input_ports)]
+        actions = []
 
-        conditions = []
+        conditions = [Condition(ID=self.__class__.__name__, input_ports=input_ports)]
 
         return actions, conditions
 
@@ -38,8 +34,9 @@ class ApproachAgent(BTNode):
             self.__class__.__name__,
             attrib={
                 "agent_id": "{id}",
-                "target_agent_id": str(self.target_agent_id),
                 "time_step": str(self.time_step),
+                "target_id": str(self.target_id),
+                "distance_threshold": str(self.distance_threshold),
                 "duration": str(self.duration),
             },
         )
