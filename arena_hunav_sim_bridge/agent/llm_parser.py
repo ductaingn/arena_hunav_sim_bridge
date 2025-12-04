@@ -32,7 +32,6 @@ class Parser:
                 agent_json["name"],
                 agent_json["pos"],
                 agent_json["model"],
-                agent_json["waypoints"],
             )
             agent.id = agent_id_manager.get_agent_id()
             agents.update({agent.name: agent})
