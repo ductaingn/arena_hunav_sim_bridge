@@ -397,7 +397,7 @@
       },
       {
         "name": "GoTo",
-        "purpose": "Commands the agent to navigate directly to a specified point.",
+        "purpose": "Commands the agent to navigate to a specified point.",
         "inputs": [
           {
             "name": "agent_name",
@@ -668,7 +668,7 @@
       },
       {
         "name": "AdvanceQueue",
-        "purpose": "Commands multiple agents to form a queue and then advance progressively toward the front. Each agent first moves to its designated waiting position, then successively moves to the previous agent's position as the queue advances. The order of the queue is determined by the order in which agents are listed.",
+        "purpose": "Commands multiple agents to form an ordered queue and then progress sequentially toward the front position. It first directs each agent to its designated waiting position, then successively moves to the previous agent's position as the queue advances. The order of the queue is determined by the order in which agents are listed. The progression is regulated by the built-in wait_duration, which introduces a delay every time an agent successfully occupies a new queue position, so don't use addition StopAndWaitTimer or TimeDelayDecorator nodes for this behavior.",
         "inputs": [
           {
             "name": "agents_names",

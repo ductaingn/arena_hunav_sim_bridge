@@ -89,7 +89,7 @@ class Action:
             ip: InputPort
             element.append(ip.to_xml())
 
-        for op in self.output_port or []:
+        for op in self.output_ports or []:
             op: OutputPort
             element.append(op.to_xml())
 

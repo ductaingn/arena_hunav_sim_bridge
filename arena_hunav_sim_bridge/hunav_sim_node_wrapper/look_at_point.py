@@ -10,7 +10,7 @@ from arena_hunav_sim_bridge.bt_models.tree_nodes_models import InputPort, Action
 class LookAtPoint(BTNode):
     agent_id: int
     goal_id: int
-    yaw_tolerance: float
+    yaw_tolerance: float = 0.087 # [rad] ~ 5 degree
 
     def get_actions_conditions(self):
         input_ports = [

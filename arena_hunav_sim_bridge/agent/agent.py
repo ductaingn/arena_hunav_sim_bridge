@@ -1,4 +1,4 @@
-from typing import Dict, List
+from typing import Dict, List, Optional
 
 import xml.etree.ElementTree as ET
 
@@ -15,7 +15,7 @@ class Agent:
     name: str
     pos: List  # [x, y, yaw (deg)]
     model: str
-    waypoints: List[List]
+    waypoints: Optional[List[List]] = attrs.field(default=[])
     id: int = attrs.field(init=False)  # Will be provided later by AgentIDManger
     behavior_tree_root: Root = attrs.field(init=False)
     nodes: Dict[int, BTNode] = attrs.field(init=False, factory=dict)

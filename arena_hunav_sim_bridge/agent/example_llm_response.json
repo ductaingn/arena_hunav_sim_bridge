@@ -3,46 +3,52 @@
     {
       "name": "hunav_1",
       "pos": [
-        24.0,
-        20.0,
-        90.0
+        10.0,
+        5.0,
+        180.0
       ],
       "type": "adult",
-      "model": "gazebo_actor",
-      "waypoints": [
-        [
-          27.1,
-          7.0,
-          10.0
-        ],
-        [
-          21.7,
-          7.0,
-          130.0
-        ]
-      ]
+      "model": "male_adult_construction_01"
     },
     {
       "name": "hunav_2",
       "pos": [
-        12.0,
-        20.0,
-        -160.0
+        11.0,
+        6.0,
+        180.0
       ],
       "type": "adult",
-      "model": "gazebo_actor",
-      "waypoints": [
-        [
-          13.1,
-          8.0,
-          150.0
-        ],
-        [
-          17.7,
-          1.0,
-          90.0
-        ]
-      ]
+      "model": "male_adult_construction_02"
+    },
+    {
+      "name": "hunav_3",
+      "pos": [
+        10.0,
+        7.0,
+        180.0
+      ],
+      "type": "adult",
+      "model": "male_adult_construction_03"
+    },
+    {
+      "name": "hunav_4",
+      "pos": [
+        11.0,
+        8.0,
+        180.0
+      ],
+      "type": "adult",
+      "model": "male_adult_construction_05"
+    },
+    {
+      "name": "hunav_5",
+      "pos": [
+        10.0,
+        9.0,
+        180.0
+      ],
+      "type": "adult",
+      "model": "male_adult_construction_01"
     }
   ],
   "single_agent_nodes": [
@@ -50,52 +56,139 @@
       "name": "GoTo",
       "attributes": {
         "agent_name": "hunav_1",
-        "target_x": 0.0,
-        "target_y": 1.1
+        "time_step": 0.1,
+        "target_x": 3.5,
+        "target_y": 1.8,
+        "tolerance": 0.5
       },
-      "order": 0
+      "order": 1
+    },
+    {
+      "name": "GoTo",
+      "attributes": {
+        "agent_name": "hunav_1",
+        "time_step": 0.1,
+        "target_x": 18.6,
+        "target_y": 6.0,
+        "tolerance": 0.2
+      },
+      "order": 2
+    },
+    {
+      "name": "GoTo",
+      "attributes": {
+        "agent_name": "hunav_2",
+        "time_step": 0.1,
+        "target_x": 3.5,
+        "target_y": 1.8,
+        "tolerance": 0.5
+      },
+      "order": 1
+    },
+    {
+      "name": "GoTo",
+      "attributes": {
+        "agent_name": "hunav_2",
+        "time_step": 0.1,
+        "target_x": 19.4,
+        "target_y": 6.0,
+        "tolerance": 0.2
+      },
+      "order": 2
+    },
+    {
+      "name": "GoTo",
+      "attributes": {
+        "agent_name": "hunav_3",
+        "time_step": 0.1,
+        "target_x": 3.5,
+        "target_y": 1.8,
+        "tolerance": 0.5
+      },
+      "order": 1
+    },
+    {
+      "name": "GoTo",
+      "attributes": {
+        "agent_name": "hunav_3",
+        "time_step": 0.1,
+        "target_x": 20.2,
+        "target_y": 6.0,
+        "tolerance": 0.2
+      },
+      "order": 2
+    },
+    {
+      "name": "GoTo",
+      "attributes": {
+        "agent_name": "hunav_4",
+        "time_step": 0.1,
+        "target_x": 3.5,
+        "target_y": 1.8,
+        "tolerance": 0.5
+      },
+      "order": 1
+    },
+    {
+      "name": "GoTo",
+      "attributes": {
+        "agent_name": "hunav_4",
+        "time_step": 0.1,
+        "target_x": 21.0,
+        "target_y": 6.0,
+        "tolerance": 0.2
+      },
+      "order": 2
+    },
+    {
+      "name": "GoTo",
+      "attributes": {
+        "agent_name": "hunav_5",
+        "time_step": 0.1,
+        "target_x": 3.5,
+        "target_y": 1.8,
+        "tolerance": 0.5
+      },
+      "order": 1
+    },
+    {
+      "name": "GoTo",
+      "attributes": {
+        "agent_name": "hunav_5",
+        "time_step": 0.1,
+        "target_x": 21.8,
+        "target_y": 6.0,
+        "tolerance": 0.2
+      },
+      "order": 2
     }
   ],
   "multi_agent_nodes": [
     {
-      "name": "Queue",
+      "name": "AdvanceQueue",
       "attributes": {
         "agents_names": [
           "hunav_1",
-          "hunav_2"
+          "hunav_2",
+          "hunav_3",
+          "hunav_4",
+          "hunav_5"
         ],
-        "wait_duration": [
-          20,
-          30
-        ],
+        "wait_duration": 20.0,
         "front_agent_pose": [
-          -90.0,
-          90.0,
-          0.0
+          8.5,
+          2.5,
+          180.0
         ],
-        "direction": 92.5,
+        "direction": 90.0,
         "distance": 1.0
       },
       "orders": {
-        "hunav_1": 1,
-        "hunav_2": 0
-      }
-    },
-    {
-      "name": "ConversationFormation",
-      "attributes": {
-        "main_agent_name": "hunav_2",
-        "non_main_agent_names": [
-          "hunav_1"
-        ],
-        "conversation_duration": 20.0,
-        "target_x": 10.0,
-        "target_y": 20.0,
-        "time_step": 1.0
-      },
-      "orders": {
-        "hunav_1": 2,
-        "hunav_2": 1
+        "hunav_1": 0,
+        "hunav_2": 0,
+        "hunav_3": 0,
+        "hunav_4": 0,
+        "hunav_5": 0
       }
     }
   ]
