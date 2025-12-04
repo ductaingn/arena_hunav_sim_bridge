@@ -40,10 +40,16 @@ class AdvanceQueue(ArenaMultiAgentNode):
         init=False, metadata={"description": "The calculated poses of agents."}
     )
     goals_ids: Dict[str, int | None] = attrs.field(
-        init=False, metadata={"description": "This dict contains the ID of each agent's initial position in the queue line. This must be assigned for every agent at once."}
+        init=False,
+        metadata={
+            "description": "This dict contains the ID of each agent's initial position in the queue line. This must be assigned for every agent at once."
+        },
     )
     point_to_look_at: Tuple[float, float] = attrs.field(
-        init=False, metadata={"description": "Because HuNavSim social force model does not include yaw angle, so we need to create a point in front of the line to make agents look at it to adjust the yaw of agents for realisticity."}
+        init=False,
+        metadata={
+            "description": "Because HuNavSim social force model does not include yaw angle, so we need to create a point in front of the line to make agents look at it to adjust the yaw of agents for realisticity."
+        },
     )
 
     def __attrs_post_init__(self):
@@ -61,10 +67,14 @@ class AdvanceQueue(ArenaMultiAgentNode):
         direction = np.radians(self.direction)
         unit_vector = np.array([np.cos(direction), np.sin(direction)])
 
-        self.point_to_look_at = waiting_poses[0] - unit_vector*4 # 4[m] from the first position in the line
+        self.point_to_look_at = (
+            waiting_poses[0] - unit_vector * 4
+        )  # 4[m] from the first position in the line
 
         for agent in self.agent_ordered[1:]:
-            _distance = np.random.normal(min(self.distance, 3.0), 0.1) # Make distance between agents a litle bit different from each other to look more realistic
+            _distance = np.random.normal(
+                max(self.distance, 3.0), 0.1
+            )  # Make distance between agents a litle bit different from each other to look more realistic
             waiting_pose = waiting_poses[-1] + unit_vector * _distance
             waiting_poses_dict[agent.name] = waiting_pose
             waiting_poses.append(waiting_pose)
@@ -76,13 +86,13 @@ class AdvanceQueue(ArenaMultiAgentNode):
             wait_duration_dict[agent.name] = self.wait_duration
 
         self._wait_duration = wait_duration_dict
-    
+
         goals_ids = {}
         for agent in self.agent_ordered:
             goals_ids.update({agent.name: None})
 
         self.goals_ids = goals_ids
-    
+
     def _assign_goals_ids(self, goal_id_manager: GoalIDManager):
         self.goals_ids["point_to_look_at"] = goal_id_manager.get_goal_id()
 
@@ -96,7 +106,7 @@ class AdvanceQueue(ArenaMultiAgentNode):
 
         if None in self.goals_ids.values():
             self._assign_goals_ids(goal_id_manager)
-        
+
         # Initial position in the queue
         set_goal_node = SetGoal(
             agent_id=agent.id,
@@ -107,12 +117,10 @@ class AdvanceQueue(ArenaMultiAgentNode):
 
         go_to_node = GoTo(agent_id=agent.id, goal_id=self.goals_ids[agent.name])
 
-        lop_node = LookAtPoint(agent_id=agent.id, goal_id=self.goals_ids["point_to_look_at"])
-
         sawta_node = StopAndWaitTimerAction(
             agent_id=agent.id, wait_duration=self._wait_duration[agent_name]
         )
-        nodes: List[BTNode] = [set_goal_node, go_to_node, lop_node, sawta_node]
+        nodes: List[BTNode] = [set_goal_node, go_to_node, sawta_node]
 
         # Each agent waits until the agent in front of it move, then moves to that position, until it reaches the front of the queue line
         for index in reversed(range(agent_index)):
@@ -122,14 +130,10 @@ class AdvanceQueue(ArenaMultiAgentNode):
                 GoTo(agent_id=agent.id, goal_id=self.goals_ids[agent_ahead.name])
             )
             nodes.append(
-                LookAtPoint(agent_id=agent.id, goal_id=self.goals_ids["point_to_look_at"])
-            )
-            nodes.append(
                 StopAndWaitTimerAction(
                     agent_id=agent.id, wait_duration=self._wait_duration[agent_name]
                 )
             )
-
 
         control_node = Sequence(children_nodes=nodes)
 
