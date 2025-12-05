@@ -73,7 +73,7 @@ class AdvanceQueue(ArenaMultiAgentNode):
 
         for agent in self.agent_ordered[1:]:
             _distance = np.random.normal(
-                max(self.distance, 3.0), 0.1
+                max(self.distance, 1.5), 0.1
             )  # Make distance between agents a litle bit different from each other to look more realistic
             waiting_pose = waiting_poses[-1] + unit_vector * _distance
             waiting_poses_dict[agent.name] = waiting_pose
