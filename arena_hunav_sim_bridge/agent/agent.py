@@ -58,7 +58,10 @@ class Agent:
         Convert to a XML behavior tree
         """
         nodes = []
-        for order in range(len(self.nodes.values())):
+        # Sometimes LLM generate inconsitent node orders so we should parse the order of the nodes manually
+        orders = list(self.nodes.keys())
+        orders.sort()
+        for order in orders:
             nodes.append(self.nodes[order])
 
         node = Sequence(children_nodes=nodes)

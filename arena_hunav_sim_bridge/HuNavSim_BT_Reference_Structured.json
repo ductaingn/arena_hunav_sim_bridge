@@ -393,7 +393,7 @@
           }
         ],
         "outputs": [],
-        "n_agent": "single agent node"
+        "n_agent": "multi agent node"
       },
       {
         "name": "GoTo",
