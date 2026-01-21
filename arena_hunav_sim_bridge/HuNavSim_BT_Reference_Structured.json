@@ -703,7 +703,41 @@
         ],
         "outputs": [],
         "n_agent": "multi agent node"
-      }
+      },
+      {
+        "name": "FollowVelocityField",
+        "purpose": "Commands the agent to navigate following a specified velocity field.",
+        "inputs": [
+          {
+            "name": "agent_name",
+            "type": "int",
+            "description": "Name of the agent.",
+            "required": true
+          },
+          {
+            "name": "time_step",
+            "type": "double",
+            "description": "Time step for movement updates [s].",
+            "default": 0.1,
+            "required": false
+          },
+          {
+            "name": "velocity_field_group_id",
+            "type": "int",
+            "description": "ID of the velocity field group to follow.",
+            "required": true
+          },
+          {
+            "name": "tolerance",
+            "type": "double",
+            "description": "Distance to consider 'at goal' [m].",
+            "default": 1.0,
+            "required": false
+          }
+        ],
+        "outputs": [],
+        "n_agent": "single agent node"
+      },
     ],
     "Stateful Condition Nodes": [],
     "Decorator node": [

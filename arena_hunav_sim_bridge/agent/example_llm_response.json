@@ -152,12 +152,11 @@
       "order": 1
     },
     {
-      "name": "GoTo",
+      "name": "FollowVelocityField",
       "attributes": {
         "agent_name": "hunav_5",
+        "velocity_field_group_id": 0,
         "time_step": 0.1,
-        "target_x": 21.8,
-        "target_y": 6.0,
         "tolerance": 0.2
       },
       "order": 2

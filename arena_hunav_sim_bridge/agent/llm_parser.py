@@ -166,9 +166,10 @@ class Parser:
 
 
 if __name__ == "__main__":
+    from pathlib import Path
     # Test
     with open(
-        "arena_hunav_sim_bridge/agent/example_llm_response.json",
+        Path(__file__).parent / "example_llm_response.json",
         "rt",
     ) as file:
         llm_res = json.load(file)

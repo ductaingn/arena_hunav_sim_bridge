@@ -80,6 +80,7 @@ from .block_agent import BlockAgent
 from .conversation_formation import ConversationFormation
 from .find_nearest_agent import FindNearestAgent
 from .follow_agent import FollowAgent
+from .follow_velocity_field import FollowVelocityField
 from .form_queue import FormQueue
 from .go_to import GoTo
 from .group_walk import GroupWalk
