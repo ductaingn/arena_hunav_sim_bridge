@@ -21,7 +21,8 @@ from arena_hunav_sim_bridge.global_planner.planner import MultiAgentPlanner
 @attrs.define
 class Parser:
     llm_res: Dict
-    world: WorldDescription
+    use_global_planner: bool = False
+    world: WorldDescription | None = attrs.field(default=None, kw_only=True)
     agents: Dict[str, Agent] = attrs.field(init=False)
     single_agent_nodes: List[ArenaSingleAgentNode] = attrs.field(init=False)
     multi_agent_nodes: List[ArenaMultiAgentNode] = attrs.field(init=False)
@@ -165,11 +166,14 @@ class Parser:
                 agent.add_actions_conditions(actions, conditions)
                 agent.add_node(bt_node, nodes_orders[agent.name])
 
-        planner = MultiAgentPlanner(
-            list(self.agents.values()), goal_id_manager, self.world
-        )
-        self.waypoints = planner.plan()
-        print("waypoints", self.waypoints)
+        if self.use_global_planner:
+            assert self.world is not None, (
+                "Must provide world desscription for planner!"
+            )
+            planner = MultiAgentPlanner(
+                list(self.agents.values()), goal_id_manager, self.world
+            )
+            self.waypoints = planner.plan()
 
         ret = []
 
