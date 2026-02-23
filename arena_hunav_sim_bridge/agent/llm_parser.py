@@ -214,7 +214,7 @@ if __name__ == "__main__":
     ) as file:
         llm_res = json.load(file)
 
-    parser = Parser(llm_res, world.load())
+    parser = Parser(llm_res, use_global_planner=True, world=world.load())
 
     behavior_trees: List = parser.parse()
 
