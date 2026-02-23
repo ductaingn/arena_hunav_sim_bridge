@@ -5,7 +5,7 @@ import xml.etree.ElementTree as ET
 
 import attrs
 
-from arena_simulation_setup.tree.World import World
+from arena_simulation_setup.tree.World import WorldDescription
 
 from arena_hunav_sim_bridge.agent.agent import Agent
 from arena_hunav_sim_bridge.arena_behavior_nodes import (
@@ -21,7 +21,7 @@ from arena_hunav_sim_bridge.global_planner.planner import MultiAgentPlanner
 @attrs.define
 class Parser:
     llm_res: Dict
-    world: World
+    world: WorldDescription
     agents: Dict[str, Agent] = attrs.field(init=False)
     single_agent_nodes: List[ArenaSingleAgentNode] = attrs.field(init=False)
     multi_agent_nodes: List[ArenaMultiAgentNode] = attrs.field(init=False)
@@ -187,6 +187,7 @@ if __name__ == "__main__":
     from pathlib import Path
     from ament_index_python.packages import get_package_share_directory
 
+    from arena_simulation_setup.tree.World import World
     from arena_hunav_sim_bridge.global_planner.waypoints_visualizer import (
         WaypointVisualizer,
     )
@@ -197,9 +198,7 @@ if __name__ == "__main__":
     # print("Debugger attached!")
 
     world_path = os.path.join(
-        get_package_share_directory("arena_simulation_setup"),
-        "worlds",
-        "hospital_1"
+        get_package_share_directory("arena_simulation_setup"), "worlds", "hospital_1"
     )
 
     world = World(path=Path(world_path))
@@ -211,7 +210,7 @@ if __name__ == "__main__":
     ) as file:
         llm_res = json.load(file)
 
-    parser = Parser(llm_res, world)
+    parser = Parser(llm_res, world.load())
 
     behavior_trees: List = parser.parse()
 

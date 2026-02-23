@@ -5,21 +5,24 @@ import numpy as np
 import shapely.geometry as geom
 
 import matplotlib
+
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 from pathfinding3d.core.diagonal_movement import DiagonalMovement
 from pathfinding3d.core.grid import Grid
 from pathfinding3d.finder.theta_star import ThetaStarFinder
 
-from arena_simulation_setup.tree.World import World
+from arena_simulation_setup.tree.World import WorldDescription
 
-def build_grid_from_world(world: World, resolution: float = 0.1) -> Tuple[np.ndarray, Tuple[float, float]]:
+
+def build_grid_from_world(
+    world_descr: WorldDescription, resolution: float = 0.1
+) -> Tuple[np.ndarray, Tuple[float, float]]:
     """
     Converts World description into a 3D numpy grid for Pathfinding3D.
     resolution: size of one grid cell in meters (0.1 = 10cm)
     """
     # 1. Determine World Bounds
-    world_descr = world.load()
     xmin, ymin, xmax, ymax = np.inf, np.inf, -np.inf, -np.inf
     for zone in world_descr.zones:
         xmin = min(xmin, zone.floor.pos.x - zone.floor.x_length / 2)
@@ -59,23 +62,23 @@ def build_grid_from_world(world: World, resolution: float = 0.1) -> Tuple[np.nda
             for ix in range(max(0, gx1), min(width, gx2 + 1)):
                 for iz in range(max(0, gy1), min(depth, gy2 + 1)):
                     # Check if cell center is inside the polygon
-                    cell_pt = geom.Point(
-                        xmin + ix * resolution, ymin + iz * resolution
-                    )
+                    cell_pt = geom.Point(xmin + ix * resolution, ymin + iz * resolution)
                     if obstacle_poly.contains(cell_pt):
                         matrix[ix, 0, iz] = 0  # 0 = obstacle
 
     return matrix, (xmin, ymin)
-      
+
 
 class PathFinder:
-    def __init__(self, matrix: np.ndarray, origin: Tuple[float, float], resolution: float = 0.1) -> None:
+    def __init__(
+        self, matrix: np.ndarray, origin: Tuple[float, float], resolution: float = 0.1
+    ) -> None:
         self.resolution = resolution
         self.matrix = matrix
         self.origin = origin
         self.grid = Grid(matrix=self.matrix)
         self.finder = ThetaStarFinder(diagonal_movement=DiagonalMovement.always)
-    
+
     def visualize_path(self, path, origin, resolution):
         """
         Visualizes the occupancy grid and the resulting Theta* path.
@@ -120,7 +123,7 @@ class PathFinder:
         # Reset the grid to clear any stale state from previous pathfinding calls
         # This prevents KeyError in the pathfinder's heap when making multiple queries
         self.grid.cleanup()
-        
+
         start_node = self.grid.node(
             *to_grid_coords(start_pos, self.origin, self.resolution)
         )
@@ -143,8 +146,10 @@ class PathFinder:
 
         return path
 
+
 if __name__ == "__main__":
     from pathlib import Path
+
     world_path = "/home/linh/ductai_nguyen_ws/Arena_ws/install/arena_simulation_setup/share/arena_simulation_setup/worlds/hospital_1"
     world = World(path=Path(world_path))
     matrix, origin = Grid.build_grid_from_world(world)
@@ -154,3 +159,4 @@ if __name__ == "__main__":
     waypoints = path_finder.get_waypoints(start, goal)
     print("Waypoints:", waypoints)
     path_finder.visualize_path(waypoints, path_finder.origin, path_finder.resolution)
+
