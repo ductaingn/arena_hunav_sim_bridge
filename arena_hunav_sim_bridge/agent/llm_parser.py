@@ -1,8 +1,11 @@
-from typing import List, Dict
+import os
+from typing import List, Dict, Tuple
 import json
 import xml.etree.ElementTree as ET
 
 import attrs
+
+from arena_simulation_setup.tree.World import World
 
 from arena_hunav_sim_bridge.agent.agent import Agent
 from arena_hunav_sim_bridge.arena_behavior_nodes import (
@@ -12,14 +15,19 @@ from arena_hunav_sim_bridge.arena_behavior_nodes import (
 from arena_hunav_sim_bridge.ids_manager.agent_id_manager import AgentIDManager
 from arena_hunav_sim_bridge.ids_manager.goal_id_manager import GoalIDManager
 from arena_hunav_sim_bridge.ids_manager.group_id_manager import GroupIDManager
+from arena_hunav_sim_bridge.global_planner.planner import MultiAgentPlanner
 
 
 @attrs.define
 class Parser:
     llm_res: Dict
+    world: World
     agents: Dict[str, Agent] = attrs.field(init=False)
     single_agent_nodes: List[ArenaSingleAgentNode] = attrs.field(init=False)
     multi_agent_nodes: List[ArenaMultiAgentNode] = attrs.field(init=False)
+    waypoints: Dict[str, List[Tuple[float, float]]] = attrs.field(
+        init=False, default=dict()
+    )
 
     @agents.default
     def _agent_factory(self) -> Dict[str, Agent]:
@@ -157,6 +165,12 @@ class Parser:
                 agent.add_actions_conditions(actions, conditions)
                 agent.add_node(bt_node, nodes_orders[agent.name])
 
+        planner = MultiAgentPlanner(
+            list(self.agents.values()), goal_id_manager, self.world
+        )
+        self.waypoints = planner.plan()
+        print("waypoints", self.waypoints)
+
         ret = []
 
         for agent in self.agents.values():
@@ -166,7 +180,30 @@ class Parser:
 
 
 if __name__ == "__main__":
+    import debugpy
+
+    import rclpy
+    from rclpy.executors import MultiThreadedExecutor
     from pathlib import Path
+    from ament_index_python.packages import get_package_share_directory
+
+    from arena_hunav_sim_bridge.global_planner.waypoints_visualizer import (
+        WaypointVisualizer,
+    )
+
+    # debugpy.listen(("0.0.0.0", 5678))
+    # print("Waiting for debugger attach...")
+    # debugpy.wait_for_client()
+    # print("Debugger attached!")
+
+    world_path = os.path.join(
+        get_package_share_directory("arena_simulation_setup"),
+        "worlds",
+        "hospital_1"
+    )
+
+    world = World(path=Path(world_path))
+
     # Test
     with open(
         Path(__file__).parent / "example_llm_response.json",
@@ -174,7 +211,7 @@ if __name__ == "__main__":
     ) as file:
         llm_res = json.load(file)
 
-    parser = Parser(llm_res)
+    parser = Parser(llm_res, world)
 
     behavior_trees: List = parser.parse()
 
@@ -189,3 +226,23 @@ if __name__ == "__main__":
 
         pretty_str = pretty_bytes.decode("UTF-8")
         print(pretty_str)
+
+    rclpy.init()
+
+    node = rclpy.create_node("waypoints_marker_test_node")
+
+    visualizer = WaypointVisualizer(node)
+
+    waypoints = parser.waypoints
+    visualizer.publish_markers(waypoints)
+
+    executor = MultiThreadedExecutor()
+    executor.add_node(node)
+
+    try:
+        executor.spin()
+    except KeyboardInterrupt:
+        pass
+    finally:
+        node.destroy_node()
+        rclpy.shutdown()

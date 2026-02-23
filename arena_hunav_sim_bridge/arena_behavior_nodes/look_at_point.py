@@ -20,7 +20,8 @@ class LookAtPoint(ArenaSingleAgentNode):
         goal_id = goal_id_manager.get_goal_id()
 
         set_goal_node = SetGoal(self.agent.id, self.target_x, self.target_y, goal_id)
-
+        goal_id_manager.update_goal_pos(goal_id, (self.target_x, self.target_y))
+        
         go_to_node = HNSLookAtPoint(self.agent.id, goal_id, self.yaw_tolerance)
 
         control_node = Sequence(children_nodes=[set_goal_node, go_to_node])

@@ -21,6 +21,7 @@ class GoTo(ArenaSingleAgentNode):
         goal_id = goal_id_manager.get_goal_id()
 
         set_goal_node = SetGoal(self.agent.id, self.target_x, self.target_y, goal_id)
+        goal_id_manager.update_goal_pos(goal_id, (self.target_x, self.target_y))
 
         go_to_node = HNSGoto(self.agent.id, goal_id, self.time_step, self.tolerance)
 

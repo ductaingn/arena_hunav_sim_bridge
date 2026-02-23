@@ -39,6 +39,7 @@ class ConversationFormation(ArenaMultiAgentNode):
             set_goal_node = SetGoal(
                 self.main_agent.id, self.target_x, self.target_y, self.goal_id
             )
+            goal_id_manager.update_goal_pos(self.goal_id, (self.target_x, self.target_y))
 
             cf_node = HNSConversationFormation(
                 self.main_agent.id,

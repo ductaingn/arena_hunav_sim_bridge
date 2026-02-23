@@ -20,6 +20,7 @@ class IsAtPosition(ArenaSingleAgentNode):
 
     def to_bt_node(self, *, goal_id_manager: GoalIDManager, **kwargs):
         goal_id = goal_id_manager.get_goal_id()
+        goal_id_manager.update_goal_pos(goal_id, (self.target_x, self.target_y))
 
         set_goal_node = SetGoal(self.agent.id, self.target_x, self.target_y, goal_id)
 

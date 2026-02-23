@@ -13,6 +13,9 @@ class GoTo(BTNode):
     time_step: float = 0.1
     tolerance: float = 1
 
+    def __eq__(self, value):
+        return isinstance(value, GoTo) and self.agent_id == value.agent_id and self.goal_id == value.goal_id
+
     def get_actions_conditions(self):
         input_ports = [
             InputPort(

@@ -114,6 +114,10 @@ class AdvanceQueue(ArenaMultiAgentNode):
             target_y=self.waiting_poses[agent_name][1],
             goal_id=self.goals_ids[agent.name],
         )
+        goal_id_manager.update_goal_pos(
+            self.goals_ids[agent.name],
+            (self.waiting_poses[agent_name][0], self.waiting_poses[agent_name][1]),
+        )
 
         go_to_node = GoTo(agent_id=agent.id, goal_id=self.goals_ids[agent.name])
 
