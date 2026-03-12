@@ -11,6 +11,7 @@ import matplotlib.pyplot as plt
 from pathfinding3d.core.diagonal_movement import DiagonalMovement
 from pathfinding3d.core.grid import Grid
 from pathfinding3d.finder.theta_star import ThetaStarFinder
+from pathfinding3d.finder.msp import MinimumSpanningTree
 
 from arena_simulation_setup.tree.World import WorldDescription
 
@@ -51,7 +52,7 @@ def build_grid_from_world(
             end = np.array([wall.end.x, wall.end.y])
             line = geom.LineString([start, end])
             # Inflate wall + robot safety margin
-            obstacle_poly = line.buffer(0.2)
+            obstacle_poly = line.buffer(0.3)
 
             # Find cells covered by this obstacle
             o_xmin, o_ymin, o_xmax, o_ymax = obstacle_poly.bounds
@@ -71,13 +72,17 @@ def build_grid_from_world(
 
 class PathFinder:
     def __init__(
-        self, matrix: np.ndarray, origin: Tuple[float, float], resolution: float = 0.1
+        self, matrix: np.ndarray, origin: Tuple[float, float], resolution: float = 0.1, finder: str = "theta*"
     ) -> None:
         self.resolution = resolution
         self.matrix = matrix
         self.origin = origin
         self.grid = Grid(matrix=self.matrix)
-        self.finder = ThetaStarFinder(diagonal_movement=DiagonalMovement.always)
+        if finder == "theta*":
+            self.finder = ThetaStarFinder(diagonal_movement=DiagonalMovement.always)
+        else:
+            self.finder = MinimumSpanningTree(diagonal_movement=DiagonalMovement.mro)
+
 
     def visualize_path(self, path, origin, resolution):
         """
@@ -118,7 +123,7 @@ class PathFinder:
         self, start_pos: Tuple[float, float], goal_pos: Tuple[float, float]
     ) -> List[Tuple[float, float]]:
         def to_grid_coords(pos, origin, res):
-            return int((pos[0] - origin[0]) / res), 0, int((pos[1] - origin[1]) / res)
+            return max(int(((pos[0] - origin[0]) / res)),0), 0, max(int((pos[1] - origin[1]) / res),0)
 
         # Reset the grid to clear any stale state from previous pathfinding calls
         # This prevents KeyError in the pathfinder's heap when making multiple queries
